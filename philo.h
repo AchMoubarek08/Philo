@@ -18,5 +18,8 @@ typedef struct s_init
 
 void	ft_error(char *str);
 void	ft_putstr_fd(char *s, int fd);
+int     ft_atoi(const char *str);
+int     ft_isdigit(int c);
+
 
 #endif

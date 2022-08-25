@@ -17,12 +17,12 @@ void    *func()
 
 void    initialize(int argc, char **argv, t_init *init)
 {
-    init->num_of_philos = atoi(argv[1]);
-    init->die = atoi(argv[2]);
-    init->eat = atoi(argv[3]);
-    init->sleep = atoi(argv[4]);
+    init->num_of_philos = ft_atoi(argv[1]);
+    init->die = ft_atoi(argv[2]);
+    init->eat = ft_atoi(argv[3]);
+    init->sleep = ft_atoi(argv[4]);
     if(argc == 6)
-        init->numb_dinners = atoi(argv[5]);
+        init->numb_dinners = ft_atoi(argv[5]);
 }
 
 int main(int argc, char **argv)
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     if(argc == 5 || argc == 6)
         initialize(argc, argv, &init);
     else
-        ft_error("Wrong Number of arguments\n");
+        ft_error("Wrong number of arguments\n");
     // pthread_t a, b;
     // pthread_mutex_init(&mutex, NULL);
     // pthread_create(&a, NULL, &func, NULL);
