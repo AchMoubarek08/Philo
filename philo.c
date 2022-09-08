@@ -2,10 +2,10 @@
 
 void    *func(void *var)
 {
-    t_philo *data = (t_philo *)var;
-    pthread_mutex_lock(&mutex);
-    printf("%d\n", data->id);
-    pthread_mutex_unlock(&mutex);
+    t_philo *philo = (t_philo *)var;
+    pthread_mutex_lock(philo->right);
+    printf("%d\n", philo->id);
+    pthread_mutex_unlock(philo->right);
     return(NULL);
 }
 
@@ -35,9 +35,7 @@ int init_philos(t_philo *philo, t_init *init)
     pthread_mutex_t *forks = malloc(sizeof(pthread_mutex_t) * init->num_of_philos);
     while(i < init->num_of_philos)
     {
-        pthread_mutex_init()
-        philo.left = pthread_mutex_init(&fork[i], NULL);
-        philo,right = pthread_mutex_init(&fork[i + 1), NULL);
+        philo[i].left = pthread_mutex_init(&fork[i], NULL);
         philo[i].id = i + 1;
     }
 }
@@ -47,7 +45,7 @@ int go_threads(t_philo *philo, t_init *init)
     int i = 0;
     while(i < init->num_of_philos)
     {
-        pthread_create(&philo[i].p, NULL, func, (void *)&philo[i]);
+        pthread_create(&philo[i].p, NULL, func, (void *)&philo);
         pthread_join(philo[i].p, NULL);
         i++;
     }
@@ -63,6 +61,6 @@ int main(int argc, char **argv)
     else
         ft_error("Wrong number of arguments\n");
     init_philos(philo, &init);
-    // go_threads(philo, &init);
+    go_threads(philo, &init);
     return(0);
 }
