@@ -15,6 +15,7 @@ typedef struct s_init
     int die;
     int eat;
     int sleep;
+    long int start_time;
     int numb_dinners;
 }t_init;
 
@@ -25,6 +26,7 @@ typedef struct s_philo
     pthread_mutex_t left_f;
     pthread_mutex_t *right_f;
     t_init *init;
+    long int last_dinner;
     int id;
 }t_philo;
 

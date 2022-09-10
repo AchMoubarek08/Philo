@@ -33,11 +33,16 @@ void    initialize(int argc, char **argv, t_init *init)
         init->numb_dinners = ft_atoi(argv[5]);
 }
 
-float get_time_now(void)
+long int get_time_now(void)
 {
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return(tv.tv_usec * 0.001);
+	long int			time;
+	struct timeval		current_time;
+
+	time = 0;
+	if (gettimeofday(&current_time, NULL) == -1)
+		ft_error("Gettimeofday returned -1\n");
+	time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
+	return (time);
 }
 
 int init_philos(t_philo *philo, t_init *init)
@@ -49,6 +54,8 @@ int init_philos(t_philo *philo, t_init *init)
         philo[i].num_of_philos = init->num_of_philos;
         pthread_mutex_init(&philo[i].left_f, NULL);
         philo[i].init = init;
+        philo[i].init->start_time = get_time_now();
+        printf("%ld\n", philo[i].init->start_time);
         philo[i].id = i + 1;
         i++;
     }
