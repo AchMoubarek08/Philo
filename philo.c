@@ -1,7 +1,8 @@
 #include "philo.h"
-void print(t_philo *philo, char *str)
+void print(t_philo *philo, long int time ,char *str)
 {
-    printf("%d %s\n", philo->id, str);
+    long int time_now  = get_time_now() - philo->init->start_time;
+    printf("%ld %d %s\n", time_now, philo->id, str);
 }
 void    *func(void *var)
 {
@@ -9,19 +10,27 @@ void    *func(void *var)
     pthread_mutex_lock(&(philo->left_f));
     pthread_mutex_lock((philo->right_f));
     pthread_mutex_lock(&(philo->init->print));
-    print(philo, "has taken a fork");
+    print(philo, philo->init->start_time, "has taken a fork");
     pthread_mutex_unlock(&(philo->init->print));
     pthread_mutex_lock(&(philo->init->print));
-    print(philo, "has taken a fork");
-    pthread_mutex_unlock(&(philo->init->print));
-    pthread_mutex_lock(&(philo->init->print));
-    print(philo, "is eating");
+    print(philo, philo->init->start_time, "has taken a fork");
     pthread_mutex_unlock(&(philo->init->print));
     pthread_mutex_unlock(&(philo->left_f));
     pthread_mutex_unlock((philo->right_f));
+    pthread_mutex_lock(&(philo->init->print));
+    print(philo, philo->init->start_time, "is eating");
+    sleeping(philo->init->eat);
+    pthread_mutex_unlock(&(philo->init->print));
     return(NULL);
 }
+void	sleeping(unsigned long long timetosleep)
+{
+	unsigned long long	time;
 
+	time = get_time_now();
+	while (get_time_now() < time + timetosleep)
+		usleep(10);
+}
 void    initialize(int argc, char **argv, t_init *init)
 {
     pthread_mutex_init(&init->print, NULL);
@@ -55,7 +64,6 @@ int init_philos(t_philo *philo, t_init *init)
         pthread_mutex_init(&philo[i].left_f, NULL);
         philo[i].init = init;
         philo[i].init->start_time = get_time_now();
-        printf("%ld\n", philo[i].init->start_time);
         philo[i].id = i + 1;
         i++;
     }
@@ -73,6 +81,7 @@ int go_threads(t_philo *philo, t_init *init)
         else
             philo[i].right_f = &philo[i + 1].left_f;
         pthread_create(&philo[i].p, NULL, func, &philo[i]);
+        // pthread_detach(philo[i].p);
         i++;
     }
     i = 0;
