@@ -2,25 +2,28 @@
 void print(t_philo *philo, long int time ,char *str)
 {
     long int time_now  = get_time_now() - philo->init->start_time;
+    pthread_mutex_lock(&philo->init->print);
     printf("%ld %d %s\n", time_now, philo->id, str);
+    pthread_mutex_unlock(&philo->init->print);
 }
 void    *func(void *var)
 {
-    t_philo *philo = (t_philo *)var;
-    pthread_mutex_lock(&(philo->left_f));
-    pthread_mutex_lock((philo->right_f));
-    pthread_mutex_lock(&(philo->init->print));
-    print(philo, philo->init->start_time, "has taken a fork");
-    pthread_mutex_unlock(&(philo->init->print));
-    pthread_mutex_lock(&(philo->init->print));
-    print(philo, philo->init->start_time, "has taken a fork");
-    pthread_mutex_unlock(&(philo->init->print));
-    pthread_mutex_unlock(&(philo->left_f));
-    pthread_mutex_unlock((philo->right_f));
-    pthread_mutex_lock(&(philo->init->print));
-    print(philo, philo->init->start_time, "is eating");
-    sleeping(philo->init->eat);
-    pthread_mutex_unlock(&(philo->init->print));
+    while(1)
+    {
+        t_philo *philo = (t_philo *)var;
+        pthread_mutex_lock(&(philo->left_f));
+        print(philo, philo->init->start_time, "has taken a fork");
+        pthread_mutex_lock((philo->right_f));
+        print(philo, philo->init->start_time, "has taken a fork");
+        print(philo, philo->init->start_time, "is eating");
+        sleeping(philo->init->eat);
+        philo->last_dinner = get_time_now();
+        pthread_mutex_unlock(&(philo->left_f));
+        pthread_mutex_unlock((philo->right_f));
+        print(philo, philo->init->start_time, "is sleeping");
+        sleeping(philo->init->sleep);
+        print(philo, philo->init->start_time, "is thinking");
+    }
     return(NULL);
 }
 void	sleeping(unsigned long long timetosleep)
@@ -28,8 +31,8 @@ void	sleeping(unsigned long long timetosleep)
 	unsigned long long	time;
 
 	time = get_time_now();
-	while (get_time_now() < time + timetosleep)
-		usleep(10);
+	while (get_time_now() - time < timetosleep)
+		usleep(timetosleep / 10);
 }
 void    initialize(int argc, char **argv, t_init *init)
 {
@@ -65,6 +68,10 @@ int init_philos(t_philo *philo, t_init *init)
         philo[i].init = init;
         philo[i].init->start_time = get_time_now();
         philo[i].id = i + 1;
+        if (i == init->num_of_philos - 1)
+            philo[i].right_f = &philo[0].left_f;
+        else
+            philo[i].right_f = &philo[i + 1].left_f;
         i++;
     }
 
@@ -76,14 +83,18 @@ int go_threads(t_philo *philo, t_init *init)
     int i = 0;
     while(i < init->num_of_philos)
     {
-        if (i == init->num_of_philos - 1)
-            philo[i].right_f = &philo[0].left_f;
-        else
-            philo[i].right_f = &philo[i + 1].left_f;
         pthread_create(&philo[i].p, NULL, func, &philo[i]);
+        usleep(100);
         // pthread_detach(philo[i].p);
-        i++;
+        i+=1;
     }
+    // i = 1;
+    // while(i < init->num_of_philos)
+    // {
+    //     pthread_create(&philo[i].p, NULL, func, &philo[i]);
+    //     // pthread_detach(philo[i].p);
+    //     i += 2;
+    // }
     i = 0;
     while(i < init->num_of_philos)
     {

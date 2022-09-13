@@ -39,6 +39,6 @@ int         go_threads(t_philo *philo, t_init *init);
 int         init_philos(t_philo *philo, t_init *init);
 void        initialize(int argc, char **argv, t_init *init);
 long int    get_time_now(void);
-void	sleeping(unsigned long long timetosleep);
+void	    sleeping(unsigned long long timetosleep);
 
 #endif
