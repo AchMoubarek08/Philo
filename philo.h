@@ -29,7 +29,7 @@ typedef struct s_philo
     pthread_mutex_t *right_f;
     t_init *init;
     long int last_dinner;
-    unsigned int numb_dinners;
+    unsigned int philo_eat;
     int finish;
     int id;
 }t_philo;
