@@ -18,6 +18,7 @@ void    *func(void *var)
         print(philo, philo->init->start_time, "is eating");
         sleeping(philo->init->eat);
         philo->last_dinner = get_time_now();
+        printf("last_dinner = %ld\n", philo->last_dinner);
         pthread_mutex_unlock(&(philo->left_f));
         pthread_mutex_unlock((philo->right_f));
         print(philo, philo->init->start_time, "is sleeping");
@@ -85,16 +86,8 @@ int go_threads(t_philo *philo, t_init *init)
     {
         pthread_create(&philo[i].p, NULL, func, &philo[i]);
         usleep(100);
-        // pthread_detach(philo[i].p);
         i+=1;
     }
-    // i = 1;
-    // while(i < init->num_of_philos)
-    // {
-    //     pthread_create(&philo[i].p, NULL, func, &philo[i]);
-    //     // pthread_detach(philo[i].p);
-    //     i += 2;
-    // }
     i = 0;
     while(i < init->num_of_philos)
     {

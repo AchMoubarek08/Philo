@@ -11,13 +11,14 @@
 typedef struct s_init
 {
     pthread_mutex_t print;
+    pthread_mutex_t dead;
     int dead_flag;
     int num_of_philos;
     int die;
     int eat;
     int sleep;
-    long int start_time;
     int numb_dinners;
+    long int start_time;
 }t_init;
 
 typedef struct s_philo
@@ -28,6 +29,8 @@ typedef struct s_philo
     pthread_mutex_t *right_f;
     t_init *init;
     long int last_dinner;
+    unsigned int numb_dinners;
+    int finish;
     int id;
 }t_philo;
 
