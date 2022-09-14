@@ -8,17 +8,16 @@ void print(t_philo *philo, long int time ,char *str)
 }
 void    *func(void *var)
 {
-    while(1)
+    t_philo *philo = (t_philo *)var;
+    while(check_death(philo, init) == 0)
     {
-        t_philo *philo = (t_philo *)var;
         pthread_mutex_lock(&(philo->left_f));
         print(philo, philo->init->start_time, "has taken a fork");
         pthread_mutex_lock((philo->right_f));
         print(philo, philo->init->start_time, "has taken a fork");
         print(philo, philo->init->start_time, "is eating");
-        sleeping(philo->init->eat);
         philo->last_dinner = get_time_now();
-        printf("last_dinner = %ld\n", philo->last_dinner);
+        sleeping(philo->init->eat);
         pthread_mutex_unlock(&(philo->left_f));
         pthread_mutex_unlock((philo->right_f));
         print(philo, philo->init->start_time, "is sleeping");
@@ -78,15 +77,28 @@ int init_philos(t_philo *philo, t_init *init)
 
     return(0);
 }
-
+int check_death(t_philo *philo)
+{
+    int i = 0;
+    while(i < philo->num_of_philos)
+    {
+        if(get_time_now() - philo[i].last_dinner > philo->init->die)
+        {
+            print(&philo[i], philo[i].init->start_time, "died");
+            return(1);
+        }
+        i++;
+    }
+    return(0);
+}
 int go_threads(t_philo *philo, t_init *init)
 {
     int i = 0;
     while(i < init->num_of_philos)
     {
         pthread_create(&philo[i].p, NULL, func, &philo[i]);
-        usleep(100);
-        i+=1;
+        usleep(20);
+        i++;
     }
     i = 0;
     while(i < init->num_of_philos)
@@ -96,10 +108,9 @@ int go_threads(t_philo *philo, t_init *init)
     }
     return(0);
 }
-
 int main(int argc, char **argv)
 {
-    t_init *init = malloc(sizeof(init));
+    t_init *init = malloc(sizeof(t_init));
     t_philo *philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
     if(argc == 5 || argc == 6)
         initialize(argc, argv, init);
@@ -107,5 +118,4 @@ int main(int argc, char **argv)
         ft_error("Wrong number of arguments\n");
     init_philos(philo, init);
     go_threads(philo, init);
-    return(0);
 }
