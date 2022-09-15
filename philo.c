@@ -3,27 +3,24 @@ void print(t_philo *philo, long int time ,char *str)
 {
     long int time_now  = get_time_now() - philo->init->start_time;
     pthread_mutex_lock(&philo->init->print);
-    printf("%ld %d %s\n", time_now, philo->id, str);
+    printf("%ld : %d %s\n", time_now, philo->id, str);
     pthread_mutex_unlock(&philo->init->print);
 }
 void    *func(void *var)
 {
     t_philo *philo = (t_philo *)var;
-    while(check_death(philo, init) == 0)
-    {
-        pthread_mutex_lock(&(philo->left_f));
-        print(philo, philo->init->start_time, "has taken a fork");
-        pthread_mutex_lock((philo->right_f));
-        print(philo, philo->init->start_time, "has taken a fork");
-        print(philo, philo->init->start_time, "is eating");
-        philo->last_dinner = get_time_now();
-        sleeping(philo->init->eat);
-        pthread_mutex_unlock(&(philo->left_f));
-        pthread_mutex_unlock((philo->right_f));
-        print(philo, philo->init->start_time, "is sleeping");
-        sleeping(philo->init->sleep);
-        print(philo, philo->init->start_time, "is thinking");
-    }
+    pthread_mutex_lock(&(philo->left_f));
+    print(philo, philo->init->start_time, "has taken a fork");
+    pthread_mutex_lock((philo->right_f));
+    print(philo, philo->init->start_time, "has taken a fork");
+    print(philo, philo->init->start_time, "is eating");
+    philo->last_dinner = get_time_now() - philo->init->start_time;
+    sleeping(philo->init->eat);
+    pthread_mutex_unlock(&(philo->left_f));
+    pthread_mutex_unlock((philo->right_f));
+    print(philo, philo->init->start_time, "is sleeping");
+    sleeping(philo->init->sleep);
+    print(philo, philo->init->start_time, "is thinking");
     return(NULL);
 }
 void	sleeping(unsigned long long timetosleep)
@@ -64,6 +61,7 @@ int init_philos(t_philo *philo, t_init *init)
     while(i < init->num_of_philos)
     {
         philo[i].num_of_philos = init->num_of_philos;
+        philo[i].dead_flag = 0;
         pthread_mutex_init(&philo[i].left_f, NULL);
         philo[i].init = init;
         philo[i].init->start_time = get_time_now();
@@ -82,9 +80,9 @@ int check_death(t_philo *philo)
     int i = 0;
     while(i < philo->num_of_philos)
     {
-        if(get_time_now() - philo[i].last_dinner > philo->init->die)
+        if(philo[i].last_dinner > philo->init->die)
         {
-            print(&philo[i], philo[i].init->start_time, "died");
+            print(&philo[i], philo->init->start_time, "died");
             return(1);
         }
         i++;
@@ -97,8 +95,8 @@ int go_threads(t_philo *philo, t_init *init)
     while(i < init->num_of_philos)
     {
         pthread_create(&philo[i].p, NULL, func, &philo[i]);
-        usleep(20);
         i++;
+        usleep(40);
     }
     i = 0;
     while(i < init->num_of_philos)
@@ -118,4 +116,7 @@ int main(int argc, char **argv)
         ft_error("Wrong number of arguments\n");
     init_philos(philo, init);
     go_threads(philo, init);
+    while(check_death(philo) == 0)
+    ;
+    return(0);
 }

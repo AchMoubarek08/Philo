@@ -11,8 +11,6 @@
 typedef struct s_init
 {
     pthread_mutex_t print;
-    pthread_mutex_t dead;
-    int dead_flag;
     int num_of_philos;
     int die;
     int eat;
@@ -25,6 +23,7 @@ typedef struct s_philo
 {
     int num_of_philos;
     pthread_t p;
+    int dead_flag;
     pthread_mutex_t left_f;
     pthread_mutex_t *right_f;
     t_init *init;
