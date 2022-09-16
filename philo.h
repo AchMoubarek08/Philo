@@ -23,6 +23,7 @@ typedef struct s_philo
 {
     int num_of_philos;
     pthread_t p;
+    pthread_t o;
     int dead_flag;
     pthread_mutex_t left_f;
     pthread_mutex_t *right_f;
