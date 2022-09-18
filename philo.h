@@ -56,5 +56,5 @@ int			go_threads(t_philo *philo, t_init *init);
 long int	get_time_now(void);
 void		sleeping(unsigned long long timetosleep);
 int			check_death(t_philo *philo);
-void		print(t_philo *philo, long int time, char *str);
+void		print(t_philo *philo, char *str);
 #endif

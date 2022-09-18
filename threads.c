@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-void	print(t_philo *philo, long int time, char *str)
+void	print(t_philo *philo, char *str)
 {
 	long int	time_now;
 
@@ -51,18 +51,18 @@ void	*routine(void *var)
 		if(philo->finish == 1)
 			break;
 		pthread_mutex_lock(&(philo->left_f));
-		print(philo, philo->init->start_time, "has taken a fork");
+		print(philo, "has taken a fork");
 		pthread_mutex_lock((philo->right_f));
-		print(philo, philo->init->start_time, "has taken a fork");
-		print(philo, philo->init->start_time, "is eating");
+		print(philo, "has taken a fork");
+		print(philo, "is eating");
 		philo->last_dinner = get_time_now();
 		sleeping(philo->init->eat);
 		philo->ate++;
 		pthread_mutex_unlock(&(philo->left_f));
 		pthread_mutex_unlock((philo->right_f));
-		print(philo, philo->init->start_time, "is sleeping");
+		print(philo, "is sleeping");
 		sleeping(philo->init->sleep);
-		print(philo, philo->init->start_time, "is thinking");
+		print(philo, "is thinking");
 	}
 	return (NULL);
 }

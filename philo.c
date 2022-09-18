@@ -21,7 +21,7 @@ int	check_death(t_philo *philo)
 	{
 		if (get_time_now() - philo[i].last_dinner > philo->init->die && philo->last_dinner != -1)
 		{
-			print(&philo[i], philo->init->start_time, "died");
+			print(&philo[i], "died");
 			i = 0;
 			while (i < philo->num_of_philos)
 			{
@@ -35,7 +35,7 @@ int	check_death(t_philo *philo)
 	return (0);
 }
 
-int	check_dinners(t_philo *philo, t_init *init)
+int	check_dinners(t_philo *philo)
 {
 	int	i;
 	int meals;
@@ -70,7 +70,7 @@ int	main(int argc, char **argv)
 		ft_error("Wrong number of arguments\n");
 	init_philos(philo, init);
 	go_threads(philo, init);
-	while (check_death(philo) == 0 && check_dinners(philo, init) == 0)
+	while (check_death(philo) == 0 && check_dinners(philo) == 0)
 		;
 	return (0);
 }
