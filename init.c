@@ -34,6 +34,7 @@ int	init_philos(t_philo *philo, t_init *init)
 	while (i < init->num_of_philos)
 	{
 		philo[i].finish = 0;
+		philo[i].last_dinner = get_time_now();
 		philo[i].num_of_philos = init->num_of_philos;
 		philo[i].ate = 0;
 		pthread_mutex_init(&philo[i].left_f, NULL);

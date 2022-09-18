@@ -19,7 +19,7 @@ int	check_death(t_philo *philo)
 	i = 0;
 	while (i < philo->num_of_philos)
 	{
-		if (get_time_now() - philo[i].last_dinner > philo->init->die && philo[i].last_dinner != 0)
+		if (get_time_now() - philo[i].last_dinner > philo->init->die && philo->last_dinner != -1)
 		{
 			print(&philo[i], philo->init->start_time, "died");
 			i = 0;

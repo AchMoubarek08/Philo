@@ -75,9 +75,9 @@ int	go_threads(t_philo *philo, t_init *init)
 	while (i < init->num_of_philos)
 	{
 		pthread_create(&philo[i].p, NULL, routine, &philo[i]);
+		pthread_detach(philo[i].p);
 		i++;
 		usleep(40);
-		pthread_detach(philo[i].p);
 	}
 	return (0);
 }
