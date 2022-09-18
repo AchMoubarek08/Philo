@@ -47,7 +47,9 @@ void	*routine(void *var)
 
 	philo = (t_philo *)var;
 	while (philo->dead_flag < 1)
-	{
+	{		
+		if(philo->finish == 1)
+			break;
 		pthread_mutex_lock(&(philo->left_f));
 		print(philo, philo->init->start_time, "has taken a fork");
 		pthread_mutex_lock((philo->right_f));
@@ -56,8 +58,6 @@ void	*routine(void *var)
 		philo->last_dinner = get_time_now();
 		sleeping(philo->init->eat);
 		philo->ate++;
-		if(philo->finish == 1)
-			break;
 		pthread_mutex_unlock(&(philo->left_f));
 		pthread_mutex_unlock((philo->right_f));
 		print(philo, philo->init->start_time, "is sleeping");
