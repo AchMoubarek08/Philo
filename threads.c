@@ -6,22 +6,20 @@
 /*   By: amoubare <amoubare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 02:42:38 by amoubare          #+#    #+#             */
-/*   Updated: 2022/09/16 02:48:55 by amoubare         ###   ########.fr       */
+/*   Updated: 2022/09/17 05:54:35 by amoubare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
 void	print(t_philo *philo, long int time, char *str)
 {
 	long int	time_now;
 
 	time_now = get_time_now() - philo->init->start_time;
 	pthread_mutex_lock(&philo->init->print);
-	printf("%ld : %d %s\n", time_now, philo->id, str);
+	printf("%ld %d %s\n", time_now, philo->id, str);
 	pthread_mutex_unlock(&philo->init->print);
 }
-
 void	sleeping(unsigned long long timetosleep)
 {
 	unsigned long long	time;
@@ -43,7 +41,7 @@ long int	get_time_now(void)
 	return (time);
 }
 
-void	*func(void *var)
+void	*routine(void *var)
 {
 	t_philo	*philo;
 
@@ -57,7 +55,9 @@ void	*func(void *var)
 		print(philo, philo->init->start_time, "is eating");
 		philo->last_dinner = get_time_now();
 		sleeping(philo->init->eat);
-		philo->philo_eat++;
+		philo->ate++;
+		if(philo->finish == 1)
+			break;
 		pthread_mutex_unlock(&(philo->left_f));
 		pthread_mutex_unlock((philo->right_f));
 		print(philo, philo->init->start_time, "is sleeping");
@@ -74,7 +74,7 @@ int	go_threads(t_philo *philo, t_init *init)
 	i = 0;
 	while (i < init->num_of_philos)
 	{
-		pthread_create(&philo[i].p, NULL, func, &philo[i]);
+		pthread_create(&philo[i].p, NULL, routine, &philo[i]);
 		i++;
 		usleep(40);
 		pthread_detach(philo[i].p);

@@ -6,7 +6,7 @@
 /*   By: amoubare <amoubare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 02:42:22 by amoubare          #+#    #+#             */
-/*   Updated: 2022/09/16 02:59:49 by amoubare         ###   ########.fr       */
+/*   Updated: 2022/09/18 02:36:43 by amoubare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,32 @@ int	check_death(t_philo *philo)
 			}
 			return (1);
 		}
-	}
-	return (0);
-}
-
-int	check_dinners(t_philo *philo)
-{
-	int	i;
-	int	total;
-
-	i = 0;
-	total = 0;
-	while (i < philo->num_of_philos)
-	{
-		printf("%d\n", total);
-		total += philo[i].philo_eat;
-		if (total == philo->num_of_philos * philo->init->numb_dinners)
-			return (1);
 		i++;
 	}
 	return (0);
 }
+
+int	check_dinners(t_philo *philo, t_init *init)
+{
+	int	i;
+	int meals;
+
+	meals = philo->init->numb_dinners;
+	i = 0;
+	while (i < philo->init->num_of_philos)
+	{
+		if(philo[i].ate != meals)
+			return(0);
+		i++;
+	}
+	i = 0;
+	while(i < philo->init->num_of_philos)
+	{
+		philo[i].finish = 1;
+		i++;
+	}
+	return(1);
+}	
 
 int	main(int argc, char **argv)
 {
@@ -65,7 +70,7 @@ int	main(int argc, char **argv)
 		ft_error("Wrong number of arguments\n");
 	init_philos(philo, init);
 	go_threads(philo, init);
-	while (check_death(philo) == 0)
+	while (check_death(philo) == 0 && check_dinners(philo, init) == 0)
 		;
 	return (0);
 }
