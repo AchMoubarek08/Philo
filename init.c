@@ -6,7 +6,7 @@
 /*   By: amoubare <amoubare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 02:42:16 by amoubare          #+#    #+#             */
-/*   Updated: 2022/09/17 01:48:47 by amoubare         ###   ########.fr       */
+/*   Updated: 2022/09/19 09:35:03 by amoubare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	initialize(int argc, char **argv, t_init *init)
 {
 	pthread_mutex_init(&init->print, NULL);
-	pthread_mutex_init(&init->write_lock, NULL);
 	init->num_of_philos = ft_atoi(argv[1]);
 	init->die = ft_atoi(argv[2]);
 	init->eat = ft_atoi(argv[3]);
@@ -24,6 +23,9 @@ void	initialize(int argc, char **argv, t_init *init)
 		init->numb_dinners = ft_atoi(argv[5]);
 	else
 		init->numb_dinners = -1;
+	if (init->die < 60 || init->eat < 60 || init->sleep < 60
+		|| init->num_of_philos < 1)
+		ft_error("wrong args");
 }
 
 int	init_philos(t_philo *philo, t_init *init)
@@ -33,6 +35,7 @@ int	init_philos(t_philo *philo, t_init *init)
 	i = 0;
 	while (i < init->num_of_philos)
 	{
+		philo[i].dead_flag = 0;
 		philo[i].finish = 0;
 		philo[i].last_dinner = get_time_now();
 		philo[i].num_of_philos = init->num_of_philos;

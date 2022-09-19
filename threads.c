@@ -6,11 +6,12 @@
 /*   By: amoubare <amoubare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 02:42:38 by amoubare          #+#    #+#             */
-/*   Updated: 2022/09/17 05:54:35 by amoubare         ###   ########.fr       */
+/*   Updated: 2022/09/19 08:50:52 by amoubare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
 void	print(t_philo *philo, char *str)
 {
 	long int	time_now;
@@ -20,6 +21,7 @@ void	print(t_philo *philo, char *str)
 	printf("%ld %d %s\n", time_now, philo->id, str);
 	pthread_mutex_unlock(&philo->init->print);
 }
+
 void	sleeping(unsigned long long timetosleep)
 {
 	unsigned long long	time;
@@ -48,8 +50,8 @@ void	*routine(void *var)
 	philo = (t_philo *)var;
 	while (philo->dead_flag < 1)
 	{		
-		if(philo->finish == 1)
-			break;
+		if (philo->finish == 1)
+			break ;
 		pthread_mutex_lock(&(philo->left_f));
 		print(philo, "has taken a fork");
 		pthread_mutex_lock((philo->right_f));

@@ -6,7 +6,7 @@
 /*   By: amoubare <amoubare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 03:01:31 by amoubare          #+#    #+#             */
-/*   Updated: 2022/09/17 01:49:35 by amoubare         ###   ########.fr       */
+/*   Updated: 2022/09/19 09:23:27 by amoubare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 typedef struct s_init
 {
 	pthread_mutex_t	print;
-	pthread_mutex_t	write_lock;
 	int				num_of_philos;
 	int				die;
 	int				eat;

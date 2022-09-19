@@ -6,7 +6,7 @@
 /*   By: amoubare <amoubare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 02:42:22 by amoubare          #+#    #+#             */
-/*   Updated: 2022/09/18 02:36:43 by amoubare         ###   ########.fr       */
+/*   Updated: 2022/09/19 08:52:16 by amoubare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 int	check_death(t_philo *philo)
 {
-	int	i;
+	int			i;
 
 	i = 0;
 	while (i < philo->num_of_philos)
 	{
-		if (get_time_now() - philo[i].last_dinner > philo->init->die && philo->last_dinner != -1)
+		if (get_time_now() - philo[i].last_dinner > philo->init->die
+			&& philo->last_dinner != -1)
 		{
 			print(&philo[i], "died");
 			i = 0;
@@ -38,23 +39,23 @@ int	check_death(t_philo *philo)
 int	check_dinners(t_philo *philo)
 {
 	int	i;
-	int meals;
+	int	meals;
 
 	meals = philo->init->numb_dinners;
 	i = 0;
 	while (i < philo->init->num_of_philos)
 	{
-		if(philo[i].ate != meals)
-			return(0);
+		if (philo[i].ate != meals)
+			return (0);
 		i++;
 	}
 	i = 0;
-	while(i < philo->init->num_of_philos)
+	while (i < philo->init->num_of_philos)
 	{
 		philo[i].finish = 1;
 		i++;
 	}
-	return(1);
+	return (1);
 }	
 
 int	main(int argc, char **argv)
