@@ -8,7 +8,7 @@ all : $(NAME)
 
 $(NAME):
 	
-	@gcc $(SRC) -Wall -Werror -Wextra -o $(NAME)
+	@gcc $(SRC) -Wall -Werror -Wextra -lpthread -fsanitize=address -g -o $(NAME)
 
 clean :
  

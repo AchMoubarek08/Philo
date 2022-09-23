@@ -64,11 +64,11 @@ int	main(int argc, char **argv)
 	t_philo	*philo;
 
 	init = malloc(sizeof(t_init));
-	philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 	if (argc == 5 || argc == 6)
 		initialize(argc, argv, init);
 	else
 		ft_error("Wrong number of arguments\n");
+	philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 	init_philos(philo, init);
 	go_threads(philo, init);
 	while (check_death(philo) == 0 && check_dinners(philo) == 0)

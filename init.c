@@ -25,7 +25,7 @@ void	initialize(int argc, char **argv, t_init *init)
 		init->numb_dinners = -1;
 	if (init->die < 60 || init->eat < 60 || init->sleep < 60
 		|| init->num_of_philos < 1)
-		ft_error("wrong args");
+		ft_error("wrong arg(s)\n");
 }
 
 int	init_philos(t_philo *philo, t_init *init)
